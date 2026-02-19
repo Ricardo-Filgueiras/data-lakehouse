@@ -1,0 +1,9 @@
+# Ferramentas de desenvolvimento
+flake8
+black
+pytest
+
+apache-airflow-providers-amazon
+apache-airflow-providers-postgres
+apache-airflow-providers-apache-spark
+boto3
