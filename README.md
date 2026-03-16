@@ -75,9 +75,12 @@ docker network create src_lakehouse
 docker compose -f minio/docker-compose.yml up -d
 docker compose -f metastore/docker-compose.yml up -d
 docker compose -f trino/docker-compose.prod.yml up -d
-cd airflow
-docker compose up -d
+docker compose -f airflow/docker-compose.yml up -d
 ```
+
+### 3. Segurança Trino Web UI
+A UI Trino agora exige autenticação Basic com usuário `admin` e senha `admin123` (configurado em `trino/conf/password-authenticator/passwords.properties`).
+Para produção, troque para senha forte e recomendamos TLS HTTPS.
 
 Isso criará buckets MinIO (`landing`, `bronze`, `silver`, `gold`) e subirá os serviços.
 

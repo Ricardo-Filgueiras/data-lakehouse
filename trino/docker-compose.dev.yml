@@ -6,6 +6,7 @@ services:
     ports:
       - 8080:8080
     volumes:
+      - ./conf:/etc/trino
       - ./conf/hive.properties:/etc/trino/catalog/hive.properties
       - ./conf/delta.properties:/etc/trino/catalog/delta.properties
       - ./conf/iceberg.properties:/etc/trino/catalog/iceberg.properties
