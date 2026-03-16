@@ -50,22 +50,27 @@ data-lakehouse/
 docker network create src_lakehouse
 ```
 
-### 1. Subindo o Data Lake (MinIO + Metastore + Trino + Airflow)
-A arquitetura agora está separada por componentes para facilitar manutenção e produção. Use o script de início:
+### 1. Rodando em VPS Ubuntu 24.04
+Este projeto foi organizado para executar em Ubuntu 24.04 com Docker e Docker Compose. A ordem de start é importante: MinIO -> Metastore -> Trino -> Airflow.
+
+Use o script de início:
 ```bash
+cd /caminho/para/data-lakehouse
 bash scripts/start.sh
 ```
+
 No Windows:
 ```powershell
+cd C:\caminho\para\data-lakehouse
 powershell -File scripts/start.ps1
 ```
 
 ### 2. Passos manuais (se preferir)
-1. Crie `src_lakehouse`:
+1. Crie a rede Docker:
 ```bash
 docker network create src_lakehouse
 ```
-2. Inicie cada componente:
+2. Inicie cada componente na ordem correta:
 ```bash
 docker compose -f minio/docker-compose.yml up -d
 docker compose -f metastore/docker-compose.yml up -d
