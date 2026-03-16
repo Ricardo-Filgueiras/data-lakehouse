@@ -33,7 +33,7 @@ data-lakehouse/
 *   **Trino (antigo PrestoSQL)**
 *   **MinIO** (S3 Storage)
 *   **Hive Metastore**
-*   **PostgreSQL & MariaDB**
+*   **MariaDB** (para metastore)
 *   **Power BI** (via conector customizado)
 
 ##  Como Executar
@@ -67,8 +67,19 @@ docker-compose up -d
 | :--- | :--- | :--- |
 | **Airflow** | `8083` | Interface Web do Orquestrador |
 | **Trino** | `8080` | Console do Motor de Consulta |
-| **MinIO Console**| `9001` | Interface Web do Storage (Login: minioadmin / minioadmin) |
+| **MinIO Console**| `9001` | Interface Web do Storage |
 | **Flower** | `5555` | Monitoramento de Workers Airflow |
+
+##  Automação (Provisionamento Reprodutível)
+
+1. Crie o arquivo de variáveis de ambiente:
+   - `cp .env.example .env`
+   - `cp trino/.env.example trino/.env`
+   - `cp airflow/.env.example airflow/.env`
+2. Ajuste os valores sensíveis no `.env`.
+3. Execute o script de inicialização:
+   - Linux/macOS: `bash scripts/start.sh`
+   - Windows: `powershell -File scripts/start.ps1`
 
 ##  Notas de Manutenção
 Os serviços foram separados em pastas diferentes para permitir manutenções isoladas. Você pode derrubar o Airflow para atualizar uma biblioteca sem afetar a disponibilidade do Trino ou do Storage.

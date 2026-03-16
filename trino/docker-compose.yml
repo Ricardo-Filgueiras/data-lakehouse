@@ -26,7 +26,7 @@ services:
     volumes:
       - metastore-db:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
     extra_hosts:
       - "host.docker.internal:host-gateway"
   
@@ -37,7 +37,7 @@ services:
       - metastore-db
     networks:
       - src_lakehouse
-    command: /opt/hive-metastore/bin/schematool --verbose -initSchema -dbType mysql -userName ${MYSQL_ROOT_USER} -passWord ${MYSQL_ROOT_PASSWORD} -url jdbc:mysql://metastore-db:3306/metastore_db?createDatabaseIfNotExist=true
+    command: /opt/hive-metastore/bin/schematool --verbose -initSchema -dbType mysql -userName ${DB_ROOT_USER} -passWord ${DB_ROOT_PASSWORD} -url jdbc:mysql://metastore-db:3306/metastore_db?createDatabaseIfNotExist=true
     restart: "on-failure"
     extra_hosts:
       - "host.docker.internal:host-gateway"

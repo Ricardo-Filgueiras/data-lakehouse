@@ -1,0 +1,6 @@
+.env
+trino/.env
+airflow/.env
+*.pyc
+__pycache__/
+logs/
