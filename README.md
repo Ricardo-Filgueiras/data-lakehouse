@@ -25,6 +25,10 @@ data-lakehouse/
 │   ├── metastore/      # Configurações do Hive Metastore
 │   └── query/          # Scripts SQL de exemplo e criação de tabelas
 └── powerbi-trino-connector/ # Conector customizado para Power BI
+├── minio/            # Storage S3 compatível (MinIO)
+├── metastore/        # Hive Metastore + banco de metadados
+├── trino/            # Trino engine + configurações de catálogo
+└── airflow/          # Airflow e sua orquestração
 ```
 
 ##  Tecnologias Utilizadas
@@ -46,20 +50,32 @@ data-lakehouse/
 docker network create src_lakehouse
 ```
 
-### 1. Subindo o Data Lake (Trino + MinIO)
-Navegue até a pasta do Trino e inicie os serviços:
+### 1. Subindo o Data Lake (MinIO + Metastore + Trino + Airflow)
+A arquitetura agora está separada por componentes para facilitar manutenção e produção. Use o script de início:
 ```bash
-cd trino
-docker-compose up -d
+bash scripts/start.sh
 ```
-Isso criará automaticamente os buckets necessários no MinIO (`landing`, `bronze`, `silver`, `gold`).
+No Windows:
+```powershell
+powershell -File scripts/start.ps1
+```
 
-### 2. Subindo o Orquestrador (Airflow)
-Navegue até a pasta do Airflow e inicie os serviços:
+### 2. Passos manuais (se preferir)
+1. Crie `src_lakehouse`:
 ```bash
-cd ../airflow
-docker-compose up -d
+docker network create src_lakehouse
 ```
+2. Inicie cada componente:
+```bash
+docker compose -f minio/docker-compose.yml up -d
+docker compose -f metastore/docker-compose.yml up -d
+docker compose -f trino/docker-compose.prod.yml up -d
+cd airflow
+docker compose up -d
+```
+
+Isso criará buckets MinIO (`landing`, `bronze`, `silver`, `gold`) e subirá os serviços.
+
 
 ##  Portas de Acesso
 

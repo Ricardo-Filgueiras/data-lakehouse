@@ -4,11 +4,39 @@ $RootScript = Split-Path -Parent $MyInvocation.MyCommand.Path
 $Root = Resolve-Path "$RootScript\.."
 
 Write-Host "[1/5] Verificando arquivos de configuração..."
-if (-Not (Test-Path "$Root\.env")) { Write-Error "ERRO: arquivo .env não encontrado na raiz. Copie .env.example para .env e ajuste as variáveis."; exit 1 }
-if (-Not (Test-Path "$Root\airflow\.env")) { Write-Error "ERRO: arquivo airflow\.env não encontrado. Copie airflow\.env.example para airflow\.env."; exit 1 }
+foreach ($file in @("$Root\.env", "$Root\airflow\.env", "$Root\trino\.env")) {
+  if (-Not (Test-Path $file)) {
+    Write-Error "ERRO: arquivo $file não encontrado. Copie .env.example e ajuste as variáveis."; exit 1
+  }
+}
 
-# Sincroniza env para trino
 Copy-Item "$Root\.env" "$Root\trino\.env" -Force
+Copy-Item "$Root\.env" "$Root\metastore\.env" -Force
+Copy-Item "$Root\.env" "$Root\minio\.env" -Force
+Copy-Item "$Root\.env" "$Root\airflow\.env" -Force
+
+Write-Host "[2/5] Criando rede Docker src_lakehouse (se não existir)..."
+if (-Not (docker network ls --format '{{.Name}}' | Select-String -Pattern '^src_lakehouse$')) { docker network create src_lakehouse }
+
+Write-Host "[3/5] Iniciando MinIO..."
+Set-Location "$Root\minio"
+docker compose up -d
+
+Write-Host "[4/5] Iniciando Metastore..."
+Set-Location "$Root\metastore"
+docker compose up -d
+
+Write-Host "[5/5] Iniciando Trino e Airflow..."
+Set-Location "$Root\trino"
+docker compose -f docker-compose.prod.yml up -d
+
+Set-Location "$Root\airflow"
+docker compose up -d
+
+Write-Host "Serviços iniciados. URLs:"
+Write-Host " - MinIO: http://localhost:9001"
+Write-Host " - Trino: http://localhost:8080"
+Write-Host " - Airflow: http://localhost:8083"
 
 
 Write-Host "[2/5] Criando rede Docker src_lakehouse (se não existir)..."
