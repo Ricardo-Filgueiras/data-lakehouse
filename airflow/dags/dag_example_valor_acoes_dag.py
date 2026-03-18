@@ -1,6 +1,9 @@
-from airflow import DAG
-from airflow.operators.python import PythonOperator
-from airflow.operators.empty import EmptyOperator
+from airflow.sdk import DAG
+from airflow.decorators import task
+from airflow.providers.standard.operators.python import PythonOperator
+from airflow.providers.standard.operators.bash import BashOperator
+
+
 from airflow.macros import ds_add
 from datetime import datetime, timedelta
 from pathlib import Path

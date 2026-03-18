@@ -1,13 +1,14 @@
-apache-airflow-providers-amazon>=9.0.0
-apache-airflow-providers-postgres
-apache-airflow-providers-apache-spark==5.1.1
-# airflow
 boto3
 minio
-
-
 lxml
 beautifulsoup4
 pandas
 yfinance
+duckdb
+# apache-airflow==3.0.6
 
+
+apache-airflow-providers-amazon>=9.0.0
+apache-airflow-providers-postgres
+apache-airflow-providers-apache-spark==5.1.1
+apache-airflow-providers-oracle
