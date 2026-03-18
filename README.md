@@ -25,6 +25,10 @@ data-lakehouse/
 │   ├── metastore/      # Configurações do Hive Metastore
 │   └── query/          # Scripts SQL de exemplo e criação de tabelas
 └── powerbi-trino-connector/ # Conector customizado para Power BI
+├── minio/            # Storage S3 compatível (MinIO)
+├── metastore/        # Hive Metastore + banco de metadados
+├── trino/            # Trino engine + configurações de catálogo
+└── airflow/          # Airflow e sua orquestração
 ```
 
 ##  Tecnologias Utilizadas
@@ -46,20 +50,40 @@ data-lakehouse/
 docker network create src_lakehouse
 ```
 
-### 1. Subindo o Data Lake (Trino + MinIO)
-Navegue até a pasta do Trino e inicie os serviços:
-```bash
-cd trino
-docker-compose up -d
-```
-Isso criará automaticamente os buckets necessários no MinIO (`landing`, `bronze`, `silver`, `gold`).
+### 1. Rodando em VPS Ubuntu 24.04
+Este projeto foi organizado para executar em Ubuntu 24.04 com Docker e Docker Compose. A ordem de start é importante: MinIO -> Metastore -> Trino -> Airflow.
 
-### 2. Subindo o Orquestrador (Airflow)
-Navegue até a pasta do Airflow e inicie os serviços:
+Use o script de início:
 ```bash
-cd ../airflow
-docker-compose up -d
+cd /caminho/para/data-lakehouse
+bash scripts/start.sh
 ```
+
+No Windows:
+```powershell
+cd C:\caminho\para\data-lakehouse
+powershell -File scripts/start.ps1
+```
+
+### 2. Passos manuais (se preferir)
+1. Crie a rede Docker:
+```bash
+docker network create src_lakehouse
+```
+2. Inicie cada componente na ordem correta:
+```bash
+docker compose -f minio/docker-compose.yml up -d
+docker compose -f metastore/docker-compose.yml up -d
+docker compose -f trino/docker-compose.prod.yml up -d
+docker compose -f airflow/docker-compose.yml up -d
+```
+
+### 3. Segurança Trino Web UI
+A UI Trino agora exige autenticação Basic com usuário `admin` e senha `admin123` (configurado em `trino/conf/password-authenticator/passwords.properties`).
+Para produção, troque para senha forte e recomendamos TLS HTTPS.
+
+Isso criará buckets MinIO (`landing`, `bronze`, `silver`, `gold`) e subirá os serviços.
+
 
 ##  Portas de Acesso
 

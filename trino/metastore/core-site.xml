@@ -17,12 +17,12 @@
 
     <property>
         <name>fs.s3a.awsAccessKeyId</name>
-        <value>chapolin</value>
+        <value>minio</value>
     </property>
 
     <property>
         <name>fs.s3a.awsSecretAccessKey</name>
-        <value>mudar@123</value>
+        <value>minio123</value>
     </property>
 
     <property>

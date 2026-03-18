@@ -1,0 +1,52 @@
+# Variáveis Globais - Data Lakehouse
+DB_ROOT_USER=root
+DB_ROOT_PASSWORD=minio123
+
+# MinIO
+MINIO_ROOT_USER=minio
+MINIO_ROOT_PASSWORD=minio123
+
+# Variáveis AWS para compatibilidade (reutilizando credenciais do MinIO)
+AWS_ACCESS_KEY_ID=minio
+AWS_SECRET_ACCESS_KEY=minio123
+
+# Airflow
+AIRFLOW_UID=50000
+AIRFLOW__CORE__LOAD_EXAMPLES=false
+AIRFLOW__CORE__FERNET_KEY=your_fernet_key
+AIRFLOW__WEBSERVER__SECRET_KEY=your_secret_key
+AIRFLOW_CONN_MINI=minio://minio:minio123@minio:9000
+
+AIRFLOW_IMAGE_NAME=maestro-airflow:3.1.6
+
+AIRFLOW_USER=admin
+AIRFLOW_PASSWORD=admin
+AIRFLOW_FIRST_NAME=admin
+AIRFLOW_EMAIL=admin@example.com
+
+# Security
+AIRFLOW__CORE__FERNET_KEY=y5CXSib9exNvlzbsZ-XDuM0vNEu1Lo9wHv4PVKvtKPg=
+AIRFLOW__WEBSERVER__SECRET_KEY=8681b57a7bbd41b339999aed13f66e277e327c7d4982c741a5d2889be80fadbb
+AIRFLOW__CORE__LOAD_EXAMPLES=False
+
+# Webserver
+AIRFLOW__WEBSERVER__EXPOSE_CONFIG=True
+
+# Timezone
+AIRFLOW__CORE__DEFAULT_TIMEZONE=America/Sao_Paulo
+
+# Logging
+AIRFLOW__CORE__LOGGING_LEVEL=INFO
+
+# Paths (dentro do container)
+AIRFLOW__CORE__DAGS_FOLDER=/opt/airflow/dags
+AIRFLOW__CORE__PLUGINS_FOLDER=/opt/airflow/plugins
+AIRFLOW__CORE__BASE_LOG_FOLDER=/opt/airflow/logs
+
+
+
+
+# Bancos de Dados Internos (Airflow Postgres & Metastore DB)
+POSTGRES_USER=airflow
+POSTGRES_PASSWORD=airflow
+POSTGRES_DB=airflow
