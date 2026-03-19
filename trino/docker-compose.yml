@@ -5,12 +5,8 @@ services:
     container_name: trino
     hostname: trino
     ports:
-      - 8443:8443
+      - 8080:8080
     volumes:
-      - ./conf/config.properties:/etc/trino/config.properties
-      - ./conf/password.db:/etc/trino/password.db
-      - ./conf/password-authenticator.properties:/etc/trino/password-authenticator.properties
-      - ./conf/keystore.jks:/etc/trino/keystore.jks
       - ./conf/hive.properties:/etc/trino/catalog/hive.properties
       - ./conf/delta.properties:/etc/trino/catalog/delta.properties
       - ./conf/iceberg.properties:/etc/trino/catalog/iceberg.properties
