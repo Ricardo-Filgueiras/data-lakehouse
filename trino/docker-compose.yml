@@ -5,12 +5,8 @@ services:
     container_name: trino
     hostname: trino
     ports:
-      - 8443:8443
+      - 8080:8080
     volumes:
-      - ./conf/config.properties:/etc/trino/config.properties
-      - ./conf/password.db:/etc/trino/password.db
-      - ./conf/password-authenticator.properties:/etc/trino/password-authenticator.properties
-      - ./conf/keystore.jks:/etc/trino/keystore.jks
       - ./conf/hive.properties:/etc/trino/catalog/hive.properties
       - ./conf/delta.properties:/etc/trino/catalog/delta.properties
       - ./conf/iceberg.properties:/etc/trino/catalog/iceberg.properties
@@ -24,7 +20,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   metastore-db:
-    image: wlcamargo/mariadb
+    image: mysql:5.7
     container_name: metastore-db
     networks:
       - src_lakehouse 
@@ -34,6 +30,8 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    command: --character-set-server=latin1 --collation-server=latin1_swedish_ci
+    restart: always
   
   create-metastore-schema:
     image: wlcamargo/hive-metastore 
