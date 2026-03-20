@@ -43,8 +43,6 @@ services:
   create-metastore-schema:
     image: wlcamargo/hive-metastore 
     container_name: create-metastore-schema
-    depends_on:
-      - metastore-db
     networks:
       - src_lakehouse
     environment:
@@ -53,8 +51,8 @@ services:
     command: /opt/hive-metastore/bin/schematool --verbose -initSchema -dbType mysql -userName ${MYSQL_ROOT_USER} -passWord ${MYSQL_ROOT_PASSWORD} -url "jdbc:mysql://metastore-db:3306/metastore_db?createDatabaseIfNotExist=true&useSSL=false"
     restart: "on-failure"
     depends_on:
-        metastore-db:
-         condition: service_healthy        
+      metastore-db:
+        condition: service_healthy        
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
