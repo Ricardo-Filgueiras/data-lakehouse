@@ -33,6 +33,12 @@ services:
       - "host.docker.internal:host-gateway"
     command: --character-set-server=latin1 --collation-server=latin1_swedish_ci
     restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
   
   create-metastore-schema:
     image: wlcamargo/hive-metastore 
@@ -44,11 +50,14 @@ services:
     environment:
       - MYSQL_ROOT_USER=${MYSQL_ROOT_USER}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-    command: /opt/hive-metastore/bin/schematool --verbose -initSchema -dbType mysql -userName ${MYSQL_ROOT_USER} -passWord ${MYSQL_ROOT_PASSWORD} -url jdbc:mysql://metastore-db:3306/metastore_db?createDatabaseIfNotExist=true
+    command: /opt/hive-metastore/bin/schematool --verbose -initSchema -dbType mysql -userName ${MYSQL_ROOT_USER} -passWord ${MYSQL_ROOT_PASSWORD} -url "jdbc:mysql://metastore-db:3306/metastore_db?createDatabaseIfNotExist=true&useSSL=false"
     restart: "on-failure"
+    depends_on:
+        metastore-db:
+         condition: service_healthy        
     extra_hosts:
       - "host.docker.internal:host-gateway"
-  
+
   metastore:
     image: wlcamargo/hive-metastore
     container_name: metastore
