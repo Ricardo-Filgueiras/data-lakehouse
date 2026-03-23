@@ -6,6 +6,8 @@ pandas
 yfinance
 duckdb
 # apache-airflow==3.0.6
+sqlalchemy>=2.0.0  # Para conexão com PostgreSQL
+psycopg2-binary>=2.9.0  # Driver PostgreSQL
 
 
 apache-airflow-providers-amazon>=9.0.0

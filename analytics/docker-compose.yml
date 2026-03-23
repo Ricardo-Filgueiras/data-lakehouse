@@ -1,0 +1,30 @@
+services:
+  postgres-analytics:
+    image: postgres:16
+    container_name: postgres-analytics
+    hostname: postgres-analytics
+    environment:
+      POSTGRES_DB: analytics_db
+      POSTGRES_USER: ${POSTGRES_ANALYTICS_USER:-analytics_user}
+      POSTGRES_PASSWORD: ${POSTGRES_ANALYTICS_PASSWORD:-analytics_pass}
+    volumes:
+      - postgres-analytics-data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    ports:
+      - "5433:5432"  # Usando porta 5433 para evitar conflito com outros PostgreSQL
+    networks:
+      - src_lakehouse
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_ANALYTICS_USER:-analytics_user} -d analytics_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+volumes:
+  postgres-analytics-data:
+
+networks:
+  src_lakehouse:
+    external: true
+    name: src_lakehouse
